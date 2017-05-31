@@ -10,6 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 
 import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
 
 class LoginButtons extends React.Component {
