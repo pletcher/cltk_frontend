@@ -1,56 +1,25 @@
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import { Card } from 'material-ui/Card';
+import React from 'react';
+
 import IconButton from 'material-ui/IconButton';
+import PropTypes from 'prop-types';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { Card } from 'material-ui/Card';
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 
-// Needed for onTouchTap
-// Check this repo:
-// https://github.com/zilverline/react-tap-event-plugin
-injectTapEventPlugin();
+class WorkTeaser extends React.Component {
+	constructor(props) {
+		super(props);
 
-// Work Teaser
-WorkTeaser = React.createClass({
-
-	propTypes: {
-		work: React.PropTypes.object.isRequired,
-	},
-
-	mixins: [ReactMeteorData],
-
-	getInitialState() {
-		return {
+		this.state = {
 			isInShelf: false,
 		};
-	},
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
-	},
-
-	getMeteorData() {
-		let isInShelf = false;
-
-		const worksShelfList = Meteor.users.findOne({
-			_id: Meteor.userId(),
-		}, {
-			fields: {
-				worksShelf: 1,
-			},
-		});
-
-		const handle = Meteor.subscribe('worksShelf');
-		if (handle.ready()) {
-			if (worksShelfList && 'worksShelf' in worksShelfList) {
-				// Check if current textNode exist in bookmarked textNodes
-				isInShelf = ~worksShelfList.worksShelf.indexOf(this.props.work._id._str);
-			}
-		}
-
-		return {
-			isInShelf,
-		};
-	},
+	}
 
 	toggleShelf(isChecked) {
 		if (Meteor.userId()) {
@@ -67,7 +36,7 @@ WorkTeaser = React.createClass({
 				showLoginDialog: true,
 			});
 		}
-	},
+	}
 
 	render() {
 		const work = this.props.work;
@@ -181,10 +150,39 @@ WorkTeaser = React.createClass({
 				</CardActions>*/}
 			</Card>
 		);
-	},
-
-});
+	}
+};
 
 WorkTeaser.childContextTypes = {
-	muiTheme: React.PropTypes.object.isRequired,
+	muiTheme: PropTypes.object.isRequired,
 };
+
+WorkTeaser.propTypes = {
+	work: PropTypes.object.isRequired,
+};
+
+const WorkTeaserContainer = createContainer(props => {
+	let isInShelf = false;
+
+	const worksShelfList = Meteor.users.findOne({
+		_id: Meteor.userId(),
+	}, {
+		fields: {
+			worksShelf: 1,
+		},
+	});
+
+	const handle = Meteor.subscribe('worksShelf');
+	if (handle.ready()) {
+		if (worksShelfList && 'worksShelf' in worksShelfList) {
+			// Check if current textNode exist in bookmarked textNodes
+			isInShelf = ~worksShelfList.worksShelf.indexOf(this.props.work._id._str);
+		}
+	}
+
+	return {
+		isInShelf,
+	};
+}, WorkTeaser);
+
+export default WorkTeaser;

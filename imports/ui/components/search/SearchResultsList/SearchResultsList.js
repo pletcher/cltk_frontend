@@ -1,23 +1,18 @@
+import React from 'react';
+
 import Masonry from 'react-masonry-component/lib';
+import PropTypes from 'prop-types';
 
-SearchResultsList = React.createClass({
+import WorkTeaser from '/imports/ui/components/works/WorkTeaser/WorkTeaser';
 
-	propTypes: {
-		works: React.PropTypes.array.isRequired,
-		loadMore: React.PropTypes.func.isRequired,
-		hasMoreWorks: React.PropTypes.bool,
-	},
-
-	componentDidUpdate(prevProps) {
-	},
-
-	isLoading: false,
-	worksCount: 0,
+export default class SearchResultsList extends React.Component {
+	isLoading: false
+	worksCount: 0
 
 	loadMore() {
 		this.isLoading = true;
 		this.props.loadMore();
-	},
+	}
 
 	renderWorks() {
 		return this.props.works.map((work) => (
@@ -26,7 +21,7 @@ SearchResultsList = React.createClass({
 				work={work}
 			/>
 		));
-	},
+	}
 
 
 	render() {
@@ -79,5 +74,11 @@ SearchResultsList = React.createClass({
 
 			</div>
 		);
-	},
-});
+	}
+};
+
+SearchResultsList.propTypes = {
+	works: PropTypes.array.isRequired,
+	loadMore: PropTypes.func.isRequired,
+	hasMoreWorks: PropTypes.bool,
+};

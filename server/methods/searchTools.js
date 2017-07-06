@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 import Authors from '/imports/api/collections/authors';
 import Works from '/imports/api/collections/works';
 

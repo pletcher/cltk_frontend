@@ -1,26 +1,18 @@
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import React from 'react';
+
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import debounce from 'throttle-debounce/debounce';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-SearchTools = React.createClass({
+export default class SearchTools extends React.Component {
+	constructor(props) {
+		super(props);
 
-	propTypes: {
-		filters: React.PropTypes.array,
-		toggleSearchTerm: React.PropTypes.func,
-		handleChangeTextsearch: React.PropTypes.func,
-		handleChangeDate: React.PropTypes.func,
-
-	},
-
-	childContextTypes: {
-		muiTheme: React.PropTypes.object.isRequired,
-	},
-
-	getInitialState() {
-		return {
+		this.state = {
 			searchDropdownOpen: '',
 			yearMin: -1000,
 			yearMax: 1000,
@@ -28,11 +20,11 @@ SearchTools = React.createClass({
 			corpora: [],
 			authors: [],
 		};
-	},
+	}
 
 	getChildContext() {
 		return { muiTheme: getMuiTheme(baseTheme) };
-	},
+	}
 
 	componentDidMount() {
 		Meteor.call('searchTools', (err, res) => {
@@ -49,7 +41,7 @@ SearchTools = React.createClass({
 		});
 
 		this.refs.textsearch.getInputNode().focus();
-	},
+	}
 
 	toggleSearchDropdown(dropdown) {
 		if (this.state.searchDropdownOpen === dropdown) {
@@ -61,18 +53,18 @@ SearchTools = React.createClass({
 				searchDropdownOpen: dropdown,
 			});
 		}
-	},
+	}
 
 	toggleSearchTerm(key, value) {
 		this.props.toggleSearchTerm(key, value);
 		this.setState({
 			searchDropdownOpen: '',
 		});
-	},
+	}
 
 	handleChangeTextsearch() {
 		this.props.handleChangeTextsearch(this.refs.textsearch.input.value);
-	},
+	}
 
 
 	render() {
@@ -263,5 +255,16 @@ SearchTools = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+};
+
+SearchTools.childContextTypes = {
+	muiTheme: PropTypes.object.isRequired,
+};
+
+SearchTools.propTypes = {
+	filters: PropTypes.array,
+	toggleSearchTerm: PropTypes.func,
+	handleChangeTextsearch: PropTypes.func,
+	handleChangeDate: PropTypes.func,
+};

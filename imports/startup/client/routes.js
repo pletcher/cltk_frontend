@@ -57,7 +57,7 @@ FlowRouter.route('/terms', {
 /*
  * Route groups with permissions
  */
-loggedInGroup = FlowRouter.group({
+const loggedInGroup = FlowRouter.group({
 	triggersEnter: [AccountsTemplates.ensureSignedIn],
 });
 
@@ -65,31 +65,31 @@ loggedInGroup.route('/profile', {
 	action() {
 		ReactLayout.render(UserLayout);
 	},
+	name: 'showProfile',
 });
+
 loggedInGroup.route('/account', {
 	action() {
 		// TODO: Fix the blazeLayout render for account
 		// BlazeLayout.render('masterLayout', { main: 'account' });
 	},
+	name: 'showAccount',
 });
 
 loggedInGroup.route('/setUserName', {
-	action() {
-	// Do nothing
-	},
+	action() {},
 });
+
 loggedInGroup.route('/sign-out', {
 	triggersEnter: [
 		() => {
 			AccountsTemplates.logout();
 		},
 	],
-	action: () => {
-		// Do nothing
-	},
+	action() {},
 });
 
-this.subs = new SubsManager();
+const subs = new SubsManager();
 
 /*
 * Perform functions necessary on route load
